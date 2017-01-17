@@ -20,8 +20,8 @@ class Client {
     let query = types.query.encode({ type, key })
     this.tendermint.abciQuery({ query }, (err, res) => {
       if (err) return cb(err)
-      let resJson = Buffer.from(res[1].result.Data, 'hex').toString()
-      return JSON.parse(resJson)
+      if (res[1].result.Data === '') return cb(null, null)
+      cb(null, Buffer.from(res[1].result.Data, 'hex'))
     })
   }
 
